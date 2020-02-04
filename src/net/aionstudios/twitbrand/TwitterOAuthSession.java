@@ -19,22 +19,33 @@ import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 
+/**
+ * @author Winter Roberts
+ * Handles the OAuth Session and API request to any Twitter endpoint
+ * that uses OAuth only.
+ */
 @SuppressWarnings("deprecation")
 public class TwitterOAuthSession {
 	
-	private static TwitterOAuthSession self;
+	private static TwitterOAuthSession self; //singleton
 	
 	private static final String AUTH_FILE = "./auth.json";
 	
+	//Twitter OAuth credentials, loaded from a file.
 	private static String consumerKeyStr;
 	private static String consumerSecretStr;
 	private static String accessTokenStr;
 	private static String accessTokenSecretStr;
 	
+	//Third-party OAuth manager.
 	private static OAuthConsumer oAuthConsumer;
 	
 	private static JSONObject authconfig;
 
+	/**
+	 * Creates a new TwitterOAuthSession with the given
+	 * login credentials or stops the application if none exist.
+	 */
 	private TwitterOAuthSession() {
 		try {
 			File aucf = new File(AUTH_FILE);
@@ -66,6 +77,9 @@ public class TwitterOAuthSession {
 		}
 	}
 	
+	/**
+	 * @return A singleton object of this class.
+	 */
 	public static TwitterOAuthSession getInstance() {
 		if(self == null) {
 			self = new TwitterOAuthSession();
@@ -73,14 +87,34 @@ public class TwitterOAuthSession {
 		return self;
 	}
 	
+	/**
+	 * Makes a request to an API endpoint at the given URL.
+	 * While this can make non-twitter calls they will be signed with
+	 * the OAuth signature of the Twitter application used to create
+	 * this object.
+	 * 
+	 * @param requestQuery The URL to which this request should be made.
+	 * @return An instance of {@link TwitterAPIRequest} used to retrieve the
+	 * server response.
+	 */
 	public TwitterAPIRequest makeAPIRequest(String requestQuery) {
 		return new TwitterAPIRequest(requestQuery, oAuthConsumer);
 	}
 	
+	/**
+	 * @author Winter Roberts
+	 * Makes a request to an endpoint, signed with the Twitter OAuth credentials
+	 * loaded by this application, and stores the response.
+	 */
 	public class TwitterAPIRequest {
 		
 		private String response;
 		
+		/**
+		 * Creates this TwitterAPIRequest and makes the request.
+		 * @param requestQuery The URL to which this request should be made.
+		 * @param oauth An OAuthConsumer, used to sign this request.
+		 */
 		@SuppressWarnings("resource")
 		public TwitterAPIRequest(String requestQuery, OAuthConsumer oauth) {
 			try {
@@ -104,6 +138,9 @@ public class TwitterOAuthSession {
 			}
 		}
 		
+		/**
+		 * @return The response from this web request.
+		 */
 		public String getResponse() {
 			return response;
 		}

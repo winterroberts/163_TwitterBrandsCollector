@@ -12,6 +12,10 @@ import net.aionstudios.twitbrand.database.DatabaseConnector;
 import net.aionstudios.twitbrand.util.ConfigUtils;
 import net.aionstudios.twitbrand.util.DatabaseUtils;
 
+/**
+ * @author Winter Roberts
+ * Manages setup and configuration for the application.
+ */
 public class TwitterBrandsInfo {
 	
 	public static final String CONFIG_DB = "./database.json";
@@ -82,6 +86,10 @@ public class TwitterBrandsInfo {
 			"  `unix_timestamp` varchar(32) NOT NULL," + 
 			"  PRIMARY KEY (`tweetID`)" + 
 			") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+	/**
+	 * Runs create statements on the existing database connection to create the twitbrands
+	 * database and the stocks and tweets tables.
+	 */
 	public static void setupDB() {
 		//This may fail if using the wrong SQL version. utf8mb4_0900_ai_ci is not available for MySQL 5.
 		DatabaseUtils.prepareAndExecute(createSchema, false);

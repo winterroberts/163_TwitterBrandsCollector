@@ -25,11 +25,18 @@ public class DateTimeUtils {
 		return mysqlDateForm.format(new Date());
 	}
 	
+	/**
+	 * @return An HTTP compatible String representing the time now.
+	 */
 	public static String getServerTime() {
 	    httpDateForm.setTimeZone(TimeZone.getTimeZone("GMT"));
 	    return httpDateForm.format(new Date());
 	}
 	
+	/**
+	 * @param d The date for which this HTTP time should be generated.
+	 * @return An HTTP compatible String representing the time in 'd'.
+	 */
 	public static String getHttpTime(Date d) {
 	    httpDateForm.setTimeZone(TimeZone.getTimeZone("GMT"));
 	    return httpDateForm.format(d);
@@ -134,6 +141,11 @@ public class DateTimeUtils {
 
 	private static SimpleDateFormat tdf = new SimpleDateFormat("E MMM dd HH:mm:ss yyyy");
 	
+	/**
+	 * Converts between a Twitter timestamp and unix epoch time.
+	 * @param timestamp The String timestamp of a Twitter entity.
+	 * @return The unix epoch time which the String represents.
+	 */
 	public static Integer twitUnixTime(String timestamp){
 		tdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		if(timestamp == null) return null;
@@ -148,11 +160,22 @@ public class DateTimeUtils {
 		}
 	}
 	
+	/**
+	 * @return The current unix epoch time (seconds since Jan. 1, 1970) in GMT.
+	 */
 	public static long getEpochTime(){
 		System.out.println(Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTime().getTime()/1000);
 	    return Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTime().getTime()/1000; //(  milliseconds to seconds)
 	}
 	
+	/**
+	 * Suspends the thread for at least the number of milliseconds desired.
+	 * Prevents safety issues with the thread class method by not actually stopping the
+	 * thread.
+	 * 
+	 * @param millis The number of milliseconds for which the thread calling this method
+	 * must be paused.
+	 */
 	public static void safeWait(long millis) {
 		long start = System.currentTimeMillis();
 		while(start+millis<System.currentTimeMillis()) {

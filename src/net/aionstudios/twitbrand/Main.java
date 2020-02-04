@@ -13,6 +13,9 @@ import net.aionstudios.twitbrand.cron.CronManager;
 import net.aionstudios.twitbrand.cron.NewDateCronJob;
 import net.aionstudios.twitbrand.request.Brand;
 
+/**
+ * @author Winter Roberts
+ */
 public class Main {
 
 	public static void main(String[] args) {
@@ -31,7 +34,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		TwitterOAuthSession.getInstance();
+		TwitterOAuthSession.getInstance(); //Creates an OAuth Session with Twitter credentials
 		TwitterBrandsInfo.setupDB();
 		
 		CronDateTime cdt = new CronDateTime();
